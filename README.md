@@ -24,3 +24,40 @@ oak cp [file]/filepath [machine/group]/[filepath/path]
 oak cp -r [machine/group]/path  [path]
 oak cp [file]/path [machine/group]/path
 ```
+
+## data Demo
+
+```json
+groups:
+- machine: 
+  - node1
+  - node2
+  name: g1
+
+machines:
+- name: node1
+  host: 192.168.1.2
+  password: 123456
+  port: 22
+  private_key: ""
+  public_key: ""
+  type: password
+  user: root
+- name: node2
+  host: 192.168.1.2
+  password: 123456
+  port: 22
+  private_key: ""
+  public_key: ""
+  type: password
+  user: root
+- name: node3
+  host: 192.168.1.2
+  password: 123456
+  port: 22
+  private_key: ""
+  public_key: ""
+  type: password
+  user: root
+
+```
