@@ -2,6 +2,7 @@ package data
 
 import (
 	"fmt"
+	"log"
 )
 
 type Machine struct {
@@ -33,10 +34,18 @@ func (m *Machine) List() {
 	}
 }
 
-func (m *Machine) Del(index int) {
+func (m *Machine) Del() {
 	var data Data
 	data.Read()
-
+	var index int
+	for i, val := range data.Machines {
+		if val.Name == m.Name {
+			index = i
+			break
+		} else {
+			log.Fatal("Not found machine:", m.Name)
+		}
+	}
 	if len(data.Machines) == (index + 1) {
 		data.Machines = data.Machines[:index]
 	} else {
@@ -47,10 +56,18 @@ func (m *Machine) Del(index int) {
 
 }
 
-func (m *Machine) Update(index int) {
+func (m *Machine) Update() {
 	var data Data
 	data.Read()
-
+	var index int
+	for i, val := range data.Machines {
+		if val.Name == m.Name {
+			index = i
+			break
+		} else {
+			log.Fatal("Not found machine:", m.Name)
+		}
+	}
 	data.Machines[index] = *m
 	data.Write()
 
