@@ -1,4 +1,4 @@
-package operator
+package data
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ type Machine struct {
 	Host       string `yaml:"host"`
 	User       string `yaml:"user"`
 	Password   string `yaml:"password"`
-	Port       string `yaml:"port"`
+	Port       int    `yaml:"port"`
 	PrivateKey string `yaml:"private_key"`
 	PublicKey  string `yaml:"public_key"`
 	Type       string `yaml:"type"`
@@ -29,7 +29,7 @@ func (m *Machine) List() {
 	data.Read()
 
 	for i, val := range data.Machines {
-		fmt.Printf("Index: %d Name: %s", i, val.Name)
+		fmt.Printf("Index: %d Name: %s\n", i, val.Name)
 	}
 }
 

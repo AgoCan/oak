@@ -3,7 +3,9 @@
 
 # usage
 
-```
+```bash
+oak test [machine/group] 
+
 # machine operate
 oak m add 
 oak m ls

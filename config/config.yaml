@@ -1,3 +1,3 @@
 # 使用yaml做配置项
 
-SRORAGE_PARH: /root/.oak
+SRORAGE_PARH: storage/msg.yaml
