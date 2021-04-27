@@ -1,16 +1,80 @@
 package data
 
 import (
+	msgData "github.com/agocan/oak/pkg/data"
 	"github.com/spf13/cobra"
 )
 
-var GroupCmd = &cobra.Command{
-	Use:   "group [command]",
-	Short: "Operating group.",
-	Long:  ``,
-	Args:  cobra.MinimumNArgs(1),
-	Run:   GroupOperate,
+func GroupCommand() *cobra.Command {
+	var command = &cobra.Command{
+		Use:   "group [command]",
+		Short: "Operating groups.",
+		Long:  ``,
+	}
+	command.AddCommand(GroupAddCommand())
+	command.AddCommand(GroupRemoveCommand())
+	command.AddCommand(GroupUpdateCommand())
+	command.AddCommand(GroupListCommand())
+	
+	command.AddCommand(GroupMachineCommand())
+
+	return command
 }
 
-func GroupOperate(cmd *cobra.Command, args []string) {
+func GroupAddCommand() *cobra.Command {
+	var group msgData.Group
+	var command = &cobra.Command{
+		Use:   "add group name",
+		Short: "Add group.",
+		Long:  ``,
+		Args:  cobra.MinimumNArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			group.Name = args[0]
+			group.Add()
+		},
+	}
+	return command
+}
+
+func GroupRemoveCommand() *cobra.Command {
+	var group msgData.Group
+	var command = &cobra.Command{
+		Use:   "rm group name",
+		Short: "Remove group.",
+		Long:  ``,
+		Args:  cobra.MinimumNArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			group.Name = args[0]
+			group.Del()
+		},
+	}
+	return command
+}
+
+func GroupUpdateCommand() *cobra.Command {
+	var group msgData.Group
+	var command = &cobra.Command{
+		Use:   "update group name",
+		Short: "Update group.",
+		Long:  ``,
+		Args:  cobra.MinimumNArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			group.Name = args[0]
+			group.Update()
+		},
+	}
+	return command
+}
+
+func GroupListCommand() *cobra.Command {
+	var group msgData.Group
+	var command = &cobra.Command{
+		Use:   "ls group name",
+		Short: "List group.",
+		Long:  ``,
+		Run: func(cmd *cobra.Command, args []string) {
+			group.List()
+		},
+	}
+	return command
 }

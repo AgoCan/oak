@@ -1,82 +1,96 @@
 package data
 
 import (
+	"log"
+
 	msgData "github.com/agocan/oak/pkg/data"
 	"github.com/spf13/cobra"
 )
 
-var (
-	MacCmd = &cobra.Command{
+func MachineCommand() *cobra.Command {
+	var command = &cobra.Command{
 		Use:   "mac [command]",
 		Short: "Operating machine.",
 		Long:  ``,
 	}
-	MacAddCmd = &cobra.Command{
+	command.AddCommand(MachineAddCommand())
+	command.AddCommand(MachineRemoveCommand())
+	command.AddCommand(MachineUpdateCommand())
+	command.AddCommand(MachineListCommand())
+	return command
+}
+
+func MachineAddCommand() *cobra.Command {
+	var mac msgData.Machine
+	var command = &cobra.Command{
 		Use:   "add machine_name",
 		Short: "Add machine.",
 		Long:  ``,
 		Args:  cobra.MinimumNArgs(1),
-		Run:   AddMachine,
+		Run: func(cmd *cobra.Command, args []string) {
+			mac.Name = args[0]
+			if mac.Host == "" {
+				log.Fatal("Not host.Use -H add host message.")
+			}
+			mac.Add()
+		},
 	}
-	MacRemoveCmd = &cobra.Command{
+	command.PersistentFlags().StringVarP(&mac.Host, "host", "H", "", "Host.")
+	command.PersistentFlags().StringVarP(&mac.User, "user", "u", "root", "User.")
+	command.PersistentFlags().StringVarP(&mac.Password, "password", "p", "123456", "Password.")
+	command.PersistentFlags().IntVarP(&mac.Port, "port", "P", 22, "Port.")
+	command.PersistentFlags().StringVar(&mac.PrivateKey, "private_key", "", "PrivateKey.")
+	command.PersistentFlags().StringVar(&mac.PublicKey, "public_key", "", "PublicKey.")
+	command.PersistentFlags().StringVarP(&mac.Type, "type", "t", "password", "Type.")
+	return command
+}
+
+func MachineRemoveCommand() *cobra.Command {
+	var mac msgData.Machine
+	var command = &cobra.Command{
 		Use:   "rm machine_name",
 		Short: "Remove machine.",
 		Long:  ``,
-		Run:   RemoveMachine,
+		Args:  cobra.MinimumNArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			mac.Name = args[0]
+			mac.Del()
+		},
 	}
-	MacUpdateCmd = &cobra.Command{
+	return command
+}
+
+func MachineUpdateCommand() *cobra.Command {
+	var mac msgData.Machine
+	var command = &cobra.Command{
 		Use:   "update machine_name",
 		Short: "Update machine.",
 		Long:  ``,
-		Run:   UpdateMachine,
+		Args:  cobra.MinimumNArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			mac.Name = args[0]
+			mac.Update()
+		},
 	}
-	MacListCmd = &cobra.Command{
+	command.PersistentFlags().StringVarP(&mac.Host, "host", "H", "", "Host.")
+	command.PersistentFlags().StringVarP(&mac.User, "user", "u", "root", "User.")
+	command.PersistentFlags().StringVarP(&mac.Password, "password", "p", "123456", "Password.")
+	command.PersistentFlags().IntVarP(&mac.Port, "port", "P", 22, "Port.")
+	command.PersistentFlags().StringVar(&mac.PrivateKey, "private_key", "", "PrivateKey.")
+	command.PersistentFlags().StringVar(&mac.PublicKey, "public_key", "", "PublicKey.")
+	command.PersistentFlags().StringVarP(&mac.Type, "type", "t", "password", "Type.")
+	return command
+}
+
+func MachineListCommand() *cobra.Command {
+	var mac msgData.Machine
+	var command = &cobra.Command{
 		Use:   "ls",
 		Short: "List machine.",
 		Long:  ``,
-		Run:   ListMachine,
+		Run: func(cmd *cobra.Command, args []string) {
+			mac.List()
+		},
 	}
-	mac msgData.Machine
-)
-
-func init() {
-	MacCmd.AddCommand(MacAddCmd)
-	MacCmd.AddCommand(MacRemoveCmd)
-	MacCmd.AddCommand(MacUpdateCmd)
-	MacCmd.AddCommand(MacListCmd)
-
-	MacAddCmd.PersistentFlags().StringVarP(&mac.Host, "host", "H", "", "Host.")
-	MacAddCmd.PersistentFlags().StringVarP(&mac.User, "user", "u", "root", "User.")
-	MacAddCmd.PersistentFlags().StringVarP(&mac.Password, "password", "p", "123456", "Password.")
-	MacAddCmd.PersistentFlags().IntVarP(&mac.Port, "port", "P", 22, "Port.")
-	MacAddCmd.PersistentFlags().StringVar(&mac.PrivateKey, "private_key", "", "PrivateKey.")
-	MacAddCmd.PersistentFlags().StringVar(&mac.PublicKey, "public_key", "", "PublicKey.")
-	MacAddCmd.PersistentFlags().StringVarP(&mac.Type, "type", "t", "password", "Type.")
-
-	MacUpdateCmd.PersistentFlags().StringVarP(&mac.Host, "host", "H", "", "Host.")
-	MacUpdateCmd.PersistentFlags().StringVarP(&mac.User, "user", "u", "root", "User.")
-	MacUpdateCmd.PersistentFlags().StringVarP(&mac.Password, "password", "p", "123456", "Password.")
-	MacUpdateCmd.PersistentFlags().IntVarP(&mac.Port, "port", "P", 22, "Port.")
-	MacUpdateCmd.PersistentFlags().StringVar(&mac.PrivateKey, "private_key", "", "PrivateKey.")
-	MacUpdateCmd.PersistentFlags().StringVar(&mac.PublicKey, "public_key", "", "PublicKey.")
-	MacUpdateCmd.PersistentFlags().StringVarP(&mac.Type, "type", "t", "password", "Type.")
-}
-
-func AddMachine(cmd *cobra.Command, args []string) {
-	mac.Name = args[0]
-	mac.Add()
-}
-
-func RemoveMachine(cmd *cobra.Command, args []string) {
-	mac.Name = args[0]
-	mac.Del()
-}
-
-func UpdateMachine(cmd *cobra.Command, args []string) {
-	mac.Name = args[0]
-	mac.Update()
-}
-
-func ListMachine(cmd *cobra.Command, args []string) {
-	mac.List()
+	return command
 }

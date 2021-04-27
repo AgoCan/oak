@@ -10,8 +10,8 @@ var RootCmd = &cobra.Command{Use: "oak"}
 
 func init() {
 
-	RootCmd.AddCommand(data.MacCmd)
-	RootCmd.AddCommand(data.GroupCmd)
+	RootCmd.AddCommand(data.MachineCommand())
+	RootCmd.AddCommand(data.GroupCommand())
 
 	RootCmd.AddCommand(ssh.ExecCmd)
 	RootCmd.AddCommand(ssh.CopyCmd)

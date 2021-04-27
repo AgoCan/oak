@@ -2,6 +2,7 @@ package data
 
 import (
 	"fmt"
+	"log"
 )
 
 type Group struct {
@@ -24,9 +25,18 @@ func (g *Group) List() {
 	}
 }
 
-func (g *Group) Del(index int) {
+func (g *Group) Del() {
 	var data Data
 	data.Read()
+	var index int
+	for i, val := range data.Machines {
+		if val.Name == g.Name {
+			index = i
+			break
+		} else {
+			log.Fatal("Not found machine:", g.Name)
+		}
+	}
 	if len(data.Groups) == (index + 1) {
 		data.Groups = data.Groups[:index]
 	} else {
@@ -35,28 +45,37 @@ func (g *Group) Del(index int) {
 	data.Write()
 }
 
-func (g *Group) Update(index int) {
+func (g *Group) Update() {
 	var data Data
 	data.Read()
+	var index int
+	for i, val := range data.Machines {
+		if val.Name == g.Name {
+			index = i
+			break
+		} else {
+			log.Fatal("Not found machine:", g.Name)
+		}
+	}
 	data.Groups[index] = *g
 	data.Write()
 }
 
-func (g *Group) AddMachine(index int, Name string) {
+func (g *Group) AddMachine() {
 	var data Data
 	data.Read()
-	//data.Groups = append(data.Groups, *g)
+	g.Update()
 	data.Write()
 }
-func (g *Group) ListMachine(index int, Name string) {
+func (g *Group) ListMachine() {
 	var data Data
 	data.Read()
 }
-func (g *Group) DelMachine(index int, Name string) {
+func (g *Group) DelMachine() {
 	var data Data
 	data.Read()
 }
-func (g *Group) UpdateMachine(index int, Name string) {
+func (g *Group) UpdateMachine() {
 	var data Data
 	data.Read()
 }
