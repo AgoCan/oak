@@ -21,7 +21,7 @@ func (g *Group) List() {
 	var data Data
 	data.Read()
 	for i, val := range data.Groups {
-		fmt.Printf("Index: %d Name: %s", i, val.Name)
+		fmt.Printf("Index: %d Name: %s\n", i, val.Name)
 	}
 }
 
@@ -29,13 +29,15 @@ func (g *Group) Del() {
 	var data Data
 	data.Read()
 	var index int
-	for i, val := range data.Machines {
+	index = -1
+	for i, val := range data.Groups {
 		if val.Name == g.Name {
 			index = i
 			break
-		} else {
-			log.Fatal("Not found machine:", g.Name)
 		}
+	}
+	if index == -1 {
+		log.Fatal("Not found group:", g.Name)
 	}
 	if len(data.Groups) == (index + 1) {
 		data.Groups = data.Groups[:index]
@@ -45,37 +47,39 @@ func (g *Group) Del() {
 	data.Write()
 }
 
-func (g *Group) Update() {
+func (g *Group) Update(newName string) {
 	var data Data
 	data.Read()
+
 	var index int
-	for i, val := range data.Machines {
+	index = -1
+	for i, val := range data.Groups {
 		if val.Name == g.Name {
 			index = i
 			break
-		} else {
-			log.Fatal("Not found machine:", g.Name)
 		}
 	}
+	if index == -1 {
+		log.Fatal("Not found group:", g.Name)
+	}
+	g.Name = newName
 	data.Groups[index] = *g
 	data.Write()
+	fmt.Println("Change name successed.")
 }
 
-func (g *Group) AddMachine() {
+func (g *Group) IsNotIn() (notIn []string) {
 	var data Data
 	data.Read()
-	g.Update()
-	data.Write()
-}
-func (g *Group) ListMachine() {
-	var data Data
-	data.Read()
-}
-func (g *Group) DelMachine() {
-	var data Data
-	data.Read()
-}
-func (g *Group) UpdateMachine() {
-	var data Data
-	data.Read()
+	if len(g.Machines) == 0 {
+		return notIn
+	}
+	res := GetMachineNameMap()
+
+	for _, machine := range g.Machines {
+		if _, ok := res[machine]; !ok {
+			notIn = append(notIn, machine)
+		}
+	}
+	return notIn
 }

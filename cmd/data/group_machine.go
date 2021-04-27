@@ -19,6 +19,7 @@ func GroupMachineCommand() *cobra.Command {
 
 func GroupAddMachineCommand() *cobra.Command {
 	var group msgData.Group
+
 	var command = &cobra.Command{
 		Use:   "add group_name machine_name",
 		Short: "Group add Machine.",
@@ -26,6 +27,8 @@ func GroupAddMachineCommand() *cobra.Command {
 		Args:  cobra.MinimumNArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
 			group.Name = args[0]
+			group = *msgData.GetGroup(group.Name)
+			group.Machines = append(group.Machines, args[1:]...)
 			group.AddMachine()
 		},
 	}
@@ -41,7 +44,7 @@ func GroupRemoveMachineCommand() *cobra.Command {
 		Args:  cobra.MinimumNArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
 			group.Name = args[0]
-			group.DelMachine()
+			group.DelMachine(args[1:])
 		},
 	}
 	return command
@@ -50,7 +53,7 @@ func GroupRemoveMachineCommand() *cobra.Command {
 func GroupListMachineCommand() *cobra.Command {
 	var group msgData.Group
 	var command = &cobra.Command{
-		Use:   "ls ",
+		Use:   "ls group_name",
 		Short: "Group list Machine.",
 		Long:  ``,
 		Args:  cobra.MinimumNArgs(1),

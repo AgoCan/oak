@@ -57,3 +57,4 @@ func (d *Data) GetGroup(index int) (group Group) {
 func (d *Data) GetMachine(index int) (machine Machine) {
 	return d.Machines[index]
 }
+

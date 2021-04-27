@@ -15,7 +15,7 @@ func GroupCommand() *cobra.Command {
 	command.AddCommand(GroupRemoveCommand())
 	command.AddCommand(GroupUpdateCommand())
 	command.AddCommand(GroupListCommand())
-	
+
 	command.AddCommand(GroupMachineCommand())
 
 	return command
@@ -54,13 +54,14 @@ func GroupRemoveCommand() *cobra.Command {
 func GroupUpdateCommand() *cobra.Command {
 	var group msgData.Group
 	var command = &cobra.Command{
-		Use:   "update group name",
+		Use:   "update group_name new_group_name",
 		Short: "Update group.",
 		Long:  ``,
-		Args:  cobra.MinimumNArgs(1),
+		Args:  cobra.MinimumNArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
 			group.Name = args[0]
-			group.Update()
+
+			group.Update(args[1])
 		},
 	}
 	return command
@@ -69,7 +70,7 @@ func GroupUpdateCommand() *cobra.Command {
 func GroupListCommand() *cobra.Command {
 	var group msgData.Group
 	var command = &cobra.Command{
-		Use:   "ls group name",
+		Use:   "ls",
 		Short: "List group.",
 		Long:  ``,
 		Run: func(cmd *cobra.Command, args []string) {
