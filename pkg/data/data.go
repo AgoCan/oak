@@ -4,8 +4,9 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/agocan/oak/config"
 	"gopkg.in/yaml.v2"
+
+	"github.com/agocan/oak/config"
 )
 
 type Data struct {
@@ -57,4 +58,3 @@ func (d *Data) GetGroup(index int) (group Group) {
 func (d *Data) GetMachine(index int) (machine Machine) {
 	return d.Machines[index]
 }
-

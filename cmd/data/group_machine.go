@@ -1,8 +1,9 @@
 package data
 
 import (
-	msgData "github.com/agocan/oak/pkg/data"
 	"github.com/spf13/cobra"
+
+	msgData "github.com/agocan/oak/pkg/data"
 )
 
 func GroupMachineCommand() *cobra.Command {

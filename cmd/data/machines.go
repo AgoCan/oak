@@ -3,8 +3,9 @@ package data
 import (
 	"log"
 
-	msgData "github.com/agocan/oak/pkg/data"
 	"github.com/spf13/cobra"
+
+	msgData "github.com/agocan/oak/pkg/data"
 )
 
 func MachineCommand() *cobra.Command {
