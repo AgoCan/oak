@@ -37,15 +37,7 @@ func (m *Machine) List() {
 func (m *Machine) Del() {
 	var data Data
 	data.Read()
-	var index int
-	for i, val := range data.Machines {
-		if val.Name == m.Name {
-			index = i
-			break
-		} else {
-			log.Fatal("Not found machine:", m.Name)
-		}
-	}
+	index := m.GetIndex()
 	if len(data.Machines) == (index + 1) {
 		data.Machines = data.Machines[:index]
 	} else {
@@ -59,16 +51,24 @@ func (m *Machine) Del() {
 func (m *Machine) Update() {
 	var data Data
 	data.Read()
-	var index int
+	index := m.GetIndex()
+	data.Machines[index] = *m
+	data.Write()
+
+}
+
+func (m *Machine) GetIndex() (index int) {
+	var data Data
+	data.Read()
+	index = -1
 	for i, val := range data.Machines {
 		if val.Name == m.Name {
 			index = i
 			break
-		} else {
-			log.Fatal("Not found machine:", m.Name)
 		}
 	}
-	data.Machines[index] = *m
-	data.Write()
-
+	if index == -1 {
+		log.Fatal("Not found group:", m.Name)
+	}
+	return
 }

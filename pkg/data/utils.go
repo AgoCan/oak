@@ -43,3 +43,14 @@ func removeSliceElement(slice []string, element string) []string {
 	}
 	return slice
 }
+
+func GetMachine(name string) (machine *Machine) {
+	var data Data
+	data.Read()
+	for _, val := range data.Machines {
+		if val.Name == name {
+			return &val
+		}
+	}
+	return
+}
