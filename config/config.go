@@ -1,10 +1,5 @@
 package config
 
-// 配置文件导入yaml文件是configstruct.go
-//
-// 配置文件可以使用 -c 的参数
-// https://github.com/go-yaml/yaml
-
 import (
 	"log"
 	"os"
@@ -14,13 +9,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-// 设置配置文件的 环境变量
 var (
-	// LogDirector 日志目录
+	ExecLogPath string
 	SrorageParh string
 )
 
-// 获取文件绝对路径
+// Get abs path
 func getCurrPath() string {
 	var abPath string
 	_, filename, _, ok := runtime.Caller(1)
@@ -30,7 +24,7 @@ func getCurrPath() string {
 	return abPath
 }
 
-// InitConfig 初始化配置项
+// init config
 func Init(configFile string) {
 	if _, err := os.Stat(configFile); os.IsNotExist(err) {
 		configFile = path.Join(path.Dir(getCurrPath()), "config/config.yaml")
@@ -44,5 +38,6 @@ func Init(configFile string) {
 		log.Fatal(err)
 	}
 	SrorageParh = config.GetString("SRORAGE_PARH")
+	ExecLogPath = config.GetString("EXEC_LOG_PATH")
 
 }

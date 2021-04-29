@@ -18,7 +18,6 @@ type Ssh struct {
 }
 
 func NewSsh(machineName string) (s *Ssh) {
-
 	machine := data.GetMachine(machineName)
 	if machine == nil {
 		logMsg := fmt.Sprintf("%s machine not found.\n", machineName)
