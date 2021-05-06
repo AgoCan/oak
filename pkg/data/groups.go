@@ -13,6 +13,7 @@ type Group struct {
 func (g *Group) Add() {
 	var data Data
 	data.Read()
+	IsDuplicateName(g.Name)
 	data.Groups = append(data.Groups, *g)
 	data.Write()
 }
@@ -63,6 +64,7 @@ func (g *Group) Update(newName string) {
 		log.Fatal("Not found group:", g.Name)
 	}
 	g.Name = newName
+	IsDuplicateName(g.Name)
 	data.Groups[index] = *g
 	data.Write()
 	fmt.Println("Change name successed.")

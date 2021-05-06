@@ -19,7 +19,7 @@ type Machine struct {
 func (m *Machine) Add() {
 	var data Data
 	data.Read()
-
+	IsDuplicateName(m.Name)
 	data.Machines = append(data.Machines, *m)
 	data.Write()
 
@@ -52,6 +52,7 @@ func (m *Machine) Update() {
 	var data Data
 	data.Read()
 	index := m.GetIndex()
+	IsDuplicateName(m.Name)
 	data.Machines[index] = *m
 	data.Write()
 

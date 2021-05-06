@@ -1,5 +1,7 @@
 package data
 
+import "log"
+
 func GetMachineNameMap() (res map[string]int) {
 	var data Data
 	data.Read()
@@ -33,6 +35,7 @@ func GetGroup(name string) (group *Group) {
 	return
 }
 
+// delete Element
 func removeSliceElement(slice []string, element string) []string {
 
 	for i, val := range slice {
@@ -53,4 +56,19 @@ func GetMachine(name string) (machine *Machine) {
 		}
 	}
 	return
+}
+
+func IsDuplicateName(name string) {
+	var data Data
+	data.Read()
+	for _, val := range data.Groups {
+		if val.Name == name {
+			log.Fatal(name, " group is exist.")
+		}
+	}
+	for _, val := range data.Machines {
+		if val.Name == name {
+			log.Fatal(name, " machine is exist.")
+		}
+	}
 }
