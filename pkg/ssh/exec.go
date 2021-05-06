@@ -12,7 +12,7 @@ import (
 var wg sync.WaitGroup
 
 func (s *Ssh) Excute(command string) (err error) {
-	defer wg.Done()
+
 	session, err := s.Client.NewSession()
 	logFileName := s.Name + ".log"
 	if err != nil {
@@ -27,7 +27,8 @@ func (s *Ssh) Excute(command string) (err error) {
 		log.Fatal("远程执行cmd 失败", err)
 	}
 	utils.WriteDirectlyLog(logFileName, string(combo))
-	log.Println(command, " is succeed.")
+
+	log.Printf("%s: \"%s\" is succeed.", s.Name, command)
 	return
 }
 
@@ -41,7 +42,11 @@ func GroupExec(group *data.Group, command string) {
 		}
 		s := NewSsh(machine)
 		wg.Add(1)
-		go s.Excute(command)
+		go func() {
+			defer wg.Done()
+			s.Excute(command)
+		}()
+
 	}
 	wg.Wait()
 }

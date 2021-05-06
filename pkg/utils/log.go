@@ -16,7 +16,7 @@ func WriteDirectlyLog(fileName, msg string) error {
 		f   *os.File
 	)
 
-	f, err = os.OpenFile(config.ExecLogPath+fileName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	f, err = os.OpenFile(config.ExecLogPath+fileName, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	_, err = io.WriteString(f, "\n"+msg)
 
 	defer f.Close()
