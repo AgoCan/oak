@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 	"runtime"
+	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -39,5 +40,7 @@ func Init(configFile string) {
 	}
 	SrorageParh = config.GetString("SRORAGE_PARH")
 	ExecLogPath = config.GetString("EXEC_LOG_PATH")
-
+	if !strings.HasSuffix(ExecLogPath, "/") {
+		log.Fatal("EXEC_LOG_PATH does not end with /")
+	}
 }

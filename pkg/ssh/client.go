@@ -15,14 +15,10 @@ type Ssh struct {
 	Client *ssh.Client
 	Ctx    context.Context
 	Cancel context.CancelFunc
+	Name   string
 }
 
-func NewSsh(machineName string) (s *Ssh) {
-	machine := data.GetMachine(machineName)
-	if machine == nil {
-		logMsg := fmt.Sprintf("%s machine not found.\n", machineName)
-		log.Fatal(logMsg)
-	}
+func NewSsh(machine *data.Machine) (s *Ssh) {
 
 	config := &ssh.ClientConfig{
 		User:            machine.User,
@@ -41,12 +37,12 @@ func NewSsh(machineName string) (s *Ssh) {
 	hostport := fmt.Sprintf("%s:%d", machine.Host, machine.Port)
 	client, err := ssh.Dial("tcp", hostport, config)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("connect ssh err: ", err)
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	s = &Ssh{Client: client, Ctx: ctx, Cancel: cancel}
+	s = &Ssh{Client: client, Ctx: ctx, Cancel: cancel, Name: machine.Name}
 	return
 }
 

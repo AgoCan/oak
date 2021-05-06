@@ -15,5 +15,6 @@ func init() {
 	RootCmd.AddCommand(data.GroupCommand())
 
 	RootCmd.AddCommand(ssh.TerminalCommand())
+	RootCmd.AddCommand(ssh.ExecCmd())
 
 }

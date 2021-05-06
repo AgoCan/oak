@@ -1,6 +1,7 @@
 package ssh
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/agocan/oak/pkg/data"
 	"github.com/agocan/oak/pkg/ssh"
 )
 
@@ -28,7 +30,13 @@ func Terminal(cmd *cobra.Command, args []string) {
 	}
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGTERM, syscall.SIGINT)
-	sshClient := ssh.NewSsh(args[0])
+	machine := data.GetMachine(args[0])
+	if machine == nil {
+		logMsg := fmt.Sprintf("%s machine not found.\n", args[0])
+		log.Fatal(logMsg)
+	}
+	sshClient := ssh.NewSsh(machine)
+
 	go func() {
 		if err := sshClient.Terminal(); err != nil {
 			log.Print(err)

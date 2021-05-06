@@ -1,4 +1,5 @@
 # 使用yaml做配置项
 
 SRORAGE_PARH: storage/msg.yaml
+# End with / 
 EXEC_LOG_PATH: log/
