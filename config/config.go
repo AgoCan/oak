@@ -2,17 +2,15 @@ package config
 
 import (
 	"log"
-	"os"
 	"path"
 	"runtime"
-	"strings"
 
 	"github.com/spf13/viper"
 )
 
 var (
 	ExecLogPath string
-	SrorageParh string
+	StorageParh string
 )
 
 // Get abs path
@@ -27,20 +25,23 @@ func getCurrPath() string {
 
 // init config
 func Init(configFile string) {
-	if _, err := os.Stat(configFile); os.IsNotExist(err) {
-		configFile = path.Join(path.Dir(getCurrPath()), "config/config.yaml")
-	}
-
 	config := viper.New()
 	config.AutomaticEnv()
+
 	config.SetConfigFile(configFile)
 	err := config.ReadInConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
-	SrorageParh = config.GetString("SRORAGE_PARH")
+	StorageParh = config.GetString("SRORAGE_PARH")
+	if StorageParh == "" {
+		oakDirector := GetOakDefaultDir()
+		StorageParh = path.Join(oakDirector, "data.yaml")
+	}
+
 	ExecLogPath = config.GetString("EXEC_LOG_PATH")
-	if !strings.HasSuffix(ExecLogPath, "/") {
-		log.Fatal("EXEC_LOG_PATH does not end with /")
+	if ExecLogPath == "" {
+		oakDirector := GetOakDefaultDir()
+		ExecLogPath = path.Join(oakDirector, "log")
 	}
 }

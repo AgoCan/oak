@@ -2,23 +2,44 @@ package ssh
 
 import (
 	"fmt"
+	"log"
+	"strings"
 
 	"github.com/spf13/cobra"
+
+	"github.com/agocan/oak/pkg/data"
+	"github.com/agocan/oak/pkg/ssh"
 )
 
-var (
-	Recursion bool
+var _recursion bool
 
-	CopyCmd = &cobra.Command{
-		Use:   "cp [machine]",
-		Short: "copy file or director.",
+func CopyCmd() *cobra.Command {
+
+	var command = &cobra.Command{
+		Use:   "cp [machine/group]",
+		Short: "Excute command.",
 		Long:  ``,
-		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(args)
-		},
+		// Args:  cobra.MinimumNArgs(2),
+		Run: Copy,
 	}
-)
+	command.PersistentFlags().BoolVarP(&_recursion, "recursion", "r", false, "Recursion director.")
+	return command
+}
 
-func init() {
-	CopyCmd.PersistentFlags().BoolVarP(&Recursion, "recursion", "r", false, "Recursion director.")
+func Copy(cmd *cobra.Command, args []string) {
+	group := data.GetGroup(args[0])
+	if group != nil {
+		command := strings.Join(args[1:], " ")
+		ssh.GroupExec(group, command)
+		return
+	}
+
+	machine := data.GetMachine(args[0])
+	if machine == nil {
+		logMsg := fmt.Sprintf("%s machine not found.\n", args[0])
+		log.Fatal(logMsg)
+	}
+	sshClient := ssh.NewSsh(machine)
+
+	sshClient.Copy()
 }

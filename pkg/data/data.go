@@ -15,7 +15,7 @@ type Data struct {
 }
 
 func (d *Data) Read() {
-	data, _ := ioutil.ReadFile(config.SrorageParh)
+	data, _ := ioutil.ReadFile(config.StorageParh)
 	err := yaml.Unmarshal(data, &d)
 	if err != nil {
 		log.Fatal(err)
@@ -27,7 +27,7 @@ func (d *Data) Write() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = ioutil.WriteFile(config.SrorageParh, out, 0644)
+	err = ioutil.WriteFile(config.StorageParh, out, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
